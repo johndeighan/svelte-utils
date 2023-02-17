@@ -25,7 +25,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@jdeighan/base-utils": "^4.0.20",
-		"@jdeighan/coffee-utils": "^14.0.33",
+		"@jdeighan/coffee-utils": "^14.0.34",
 		"magic-string": "^0.29.0",
 		"sorcery": "^0.11.0",
 		"svelte": "^3.55.1"
