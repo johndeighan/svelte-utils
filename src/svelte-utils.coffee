@@ -81,7 +81,7 @@ export getManifestOptions = (hOptions={}) =>
 export genManifest = (hOptions={}) =>
 
 	hOptions = getManifestOptions(hOptions)
-	{dest, src} = hOptions
+	{dest, src, manifestFileName} = hOptions
 
 	# --- Create destination folder if it doesn't exist
 	if ! isDir dest
@@ -93,7 +93,7 @@ export genManifest = (hOptions={}) =>
 	images.map (image) => barf(mkpath(dest, image.name), image.contents)
 	files.map (file) => barf(mkpath(dest, file.name), file.contents)
 	barf mkpath(dest, 'icons.html'), html.join("\n")
-	return
+	return mkpath(dest, manifestFileName)
 
 # ---------------------------------------------------------------------------
 

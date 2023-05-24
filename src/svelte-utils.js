@@ -87,9 +87,9 @@ export var getManifestOptions = (hOptions = {}) => {
 
 // ---------------------------------------------------------------------------
 export var genManifest = async(hOptions = {}) => {
-  var dest, files, html, images, src;
+  var dest, files, html, images, manifestFileName, src;
   hOptions = getManifestOptions(hOptions);
-  ({dest, src} = hOptions);
+  ({dest, src, manifestFileName} = hOptions);
   if (!isDir(dest)) {
     mkdirSync(dest);
   }
@@ -102,6 +102,7 @@ export var genManifest = async(hOptions = {}) => {
     return barf(mkpath(dest, file.name), file.contents);
   });
   barf(mkpath(dest, 'icons.html'), html.join("\n"));
+  return mkpath(dest, manifestFileName);
 };
 
 // ---------------------------------------------------------------------------
