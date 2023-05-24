@@ -3,7 +3,7 @@
 import {assert} from '@jdeighan/base-utils/exceptions'
 import {utest} from '@jdeighan/unit-tester'
 import {
-	svelteSourceCodeEsc, svelteHtmlEsc, getFaviconOptions,
+	svelteSourceCodeEsc, svelteHtmlEsc, getManifestOptions,
 	} from '@jdeighan/svelte-utils'
 
 # ---------------------------------------------------------------------------
@@ -11,7 +11,7 @@ import {
 utest.equal 11, svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;'
 utest.equal 12, svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;'
 
-utest.equal 14, getFaviconOptions(), {
+utest.equal 14, getManifestOptions(), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"
@@ -32,7 +32,7 @@ utest.equal 14, getFaviconOptions(), {
 		android: manifestFileName: 'manifest.json'
 	}
 
-utest.equal 33, getFaviconOptions({developerName: 'John Deighan'}), {
+utest.equal 33, getManifestOptions({developerName: 'John Deighan'}), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"
@@ -53,7 +53,7 @@ utest.equal 33, getFaviconOptions({developerName: 'John Deighan'}), {
 		android: manifestFileName: 'manifest.json'
 	}
 
-utest.equal 56, getFaviconOptions({appName: 'Super App'}), {
+utest.equal 56, getManifestOptions({appName: 'Super App'}), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"

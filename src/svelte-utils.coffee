@@ -4,7 +4,7 @@ import favicons from 'favicons'
 import fs from 'fs/promises'
 import pathLib from 'path'
 import {
-	mkpath, fileExt, isDir, mkdirSync, barf,
+	mkpath, fileExt, isFile, isDir, mkdirSync, barf, execCmdSync,
 	} from '@jdeighan/coffee-utils/fs'
 
 import {isFunction, getOptions} from '@jdeighan/base-utils'
@@ -36,7 +36,7 @@ export svelteHtmlEsc = (str) =>
 # ---------------------------------------------------------------------------
 # --- export only to allow unit tests
 
-export getFaviconOptions = (hOptions={}) =>
+export getManifestOptions = (hOptions={}) =>
 
 	# --- These are defaults - all can be overridden
 	hDefaultOptions = {
@@ -78,9 +78,9 @@ export getFaviconOptions = (hOptions={}) =>
 
 # ---------------------------------------------------------------------------
 
-export genFavicons = (hOptions={}) =>
+export genManifest = (hOptions={}) =>
 
-	hOptions = getFaviconOptions(hOptions)
+	hOptions = getManifestOptions(hOptions)
 	{dest, src} = hOptions
 
 	# --- Create destination folder if it doesn't exist
@@ -93,6 +93,7 @@ export genFavicons = (hOptions={}) =>
 	images.map (image) => barf(mkpath(dest, image.name), image.contents)
 	files.map (file) => barf(mkpath(dest, file.name), file.contents)
 	barf mkpath(dest, 'icons.html'), html.join("\n")
+	return
 
 # ---------------------------------------------------------------------------
 

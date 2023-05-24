@@ -9,9 +9,11 @@ import pathLib from 'path';
 import {
   mkpath,
   fileExt,
+  isFile,
   isDir,
   mkdirSync,
-  barf
+  barf,
+  execCmdSync
 } from '@jdeighan/coffee-utils/fs';
 
 import {
@@ -42,7 +44,7 @@ export var svelteHtmlEsc = (str) => {
 
 // ---------------------------------------------------------------------------
 // --- export only to allow unit tests
-export var getFaviconOptions = (hOptions = {}) => {
+export var getManifestOptions = (hOptions = {}) => {
   var hDefaultOptions;
   // --- These are defaults - all can be overridden
   hDefaultOptions = {
@@ -84,9 +86,9 @@ export var getFaviconOptions = (hOptions = {}) => {
 };
 
 // ---------------------------------------------------------------------------
-export var genFavicons = async(hOptions = {}) => {
+export var genManifest = async(hOptions = {}) => {
   var dest, files, html, images, src;
-  hOptions = getFaviconOptions(hOptions);
+  hOptions = getManifestOptions(hOptions);
   ({dest, src} = hOptions);
   if (!isDir(dest)) {
     mkdirSync(dest);
@@ -99,7 +101,7 @@ export var genFavicons = async(hOptions = {}) => {
   files.map((file) => {
     return barf(mkpath(dest, file.name), file.contents);
   });
-  return barf(mkpath(dest, 'icons.html'), html.join("\n"));
+  barf(mkpath(dest, 'icons.html'), html.join("\n"));
 };
 
 // ---------------------------------------------------------------------------

@@ -11,7 +11,7 @@ import {
 import {
   svelteSourceCodeEsc,
   svelteHtmlEsc,
-  getFaviconOptions
+  getManifestOptions
 } from '@jdeighan/svelte-utils';
 
 // ---------------------------------------------------------------------------
@@ -19,7 +19,7 @@ utest.equal(11, svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;');
 
 utest.equal(12, svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;');
 
-utest.equal(14, getFaviconOptions(), {
+utest.equal(14, getManifestOptions(), {
   src: "./static/favicon.svg",
   dest: "./static/favicons",
   path: "/favicons",
@@ -44,7 +44,7 @@ utest.equal(14, getFaviconOptions(), {
   }
 });
 
-utest.equal(33, getFaviconOptions({
+utest.equal(33, getManifestOptions({
   developerName: 'John Deighan'
 }), {
   src: "./static/favicon.svg",
@@ -71,7 +71,7 @@ utest.equal(33, getFaviconOptions({
   }
 });
 
-utest.equal(56, getFaviconOptions({
+utest.equal(56, getManifestOptions({
   appName: 'Super App'
 }), {
   src: "./static/favicon.svg",
