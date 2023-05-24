@@ -40,6 +40,8 @@ export getFaviconOptions = (hOptions={}) =>
 
 	# --- These are defaults - all can be overridden
 	hDefaultOptions = {
+		src: "./static/favicon.svg",
+		dest: "./static/favicons",
 		path: "/favicons"
 		appName: "My Great App"
 		appShortName: "Great App"
@@ -50,6 +52,8 @@ export getFaviconOptions = (hOptions={}) =>
 		}
 	hOptions = getOptions(hOptions, hDefaultOptions)
 	return {
+		src: hOptions.src
+		dest: hOptions.dest
 		path: hOptions.path
 		appName: hOptions.appName
 		appShortName: hOptions.appShortName
@@ -74,18 +78,17 @@ export getFaviconOptions = (hOptions={}) =>
 
 # ---------------------------------------------------------------------------
 
-export genFavicons = (
-		src = "./static/favicon.svg",
-		dest = "./static/favicons",
-		hOptions = {},
-		) =>
+export genFavicons = (hOptions={}) =>
+
+	hOptions = getFaviconOptions(hOptions)
+	{dest, src} = hOptions
 
 	# --- Create destination folder if it doesn't exist
 	if ! isDir dest
 		mkdirSync dest
 
 	assert (fileExt(src).toLowerCase() == '.svg'), "Source not an SVG file"
-	{images, files, html} = await favicons(src, getFaviconOptions(hOptions))
+	{images, files, html} = await favicons(src, hOptions)
 
 	images.map (image) => barf(mkpath(dest, image.name), image.contents)
 	files.map (file) => barf(mkpath(dest, file.name), file.contents)

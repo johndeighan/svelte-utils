@@ -46,6 +46,8 @@ export var getFaviconOptions = (hOptions = {}) => {
   var hDefaultOptions;
   // --- These are defaults - all can be overridden
   hDefaultOptions = {
+    src: "./static/favicon.svg",
+    dest: "./static/favicons",
     path: "/favicons",
     appName: "My Great App",
     appShortName: "Great App",
@@ -56,6 +58,8 @@ export var getFaviconOptions = (hOptions = {}) => {
   };
   hOptions = getOptions(hOptions, hDefaultOptions);
   return {
+    src: hOptions.src,
+    dest: hOptions.dest,
     path: hOptions.path,
     appName: hOptions.appName,
     appShortName: hOptions.appShortName,
@@ -80,13 +84,15 @@ export var getFaviconOptions = (hOptions = {}) => {
 };
 
 // ---------------------------------------------------------------------------
-export var genFavicons = async(src = "./static/favicon.svg", dest = "./static/favicons", hOptions = {}) => {
-  var files, html, images;
+export var genFavicons = async(hOptions = {}) => {
+  var dest, files, html, images, src;
+  hOptions = getFaviconOptions(hOptions);
+  ({dest, src} = hOptions);
   if (!isDir(dest)) {
     mkdirSync(dest);
   }
   assert(fileExt(src).toLowerCase() === '.svg', "Source not an SVG file");
-  ({images, files, html} = (await favicons(src, getFaviconOptions(hOptions))));
+  ({images, files, html} = (await favicons(src, hOptions)));
   images.map((image) => {
     return barf(mkpath(dest, image.name), image.contents);
   });
