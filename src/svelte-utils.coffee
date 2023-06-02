@@ -3,8 +3,10 @@
 import favicons from 'favicons'
 import fs from 'fs/promises'
 import pathLib from 'path'
+
+import {mkpath, barf} from '@jdeighan/base-utils/fs'
 import {
-	mkpath, fileExt, isFile, isDir, mkdirSync, barf, execCmdSync,
+	fileExt, isFile, isDir, mkdirSync, execCmdSync,
 	} from '@jdeighan/coffee-utils/fs'
 
 import {isFunction, getOptions} from '@jdeighan/base-utils'
@@ -90,9 +92,9 @@ export genManifest = (hOptions={}) =>
 	assert (fileExt(src).toLowerCase() == '.svg'), "Source not an SVG file"
 	{images, files, html} = await favicons(src, hOptions)
 
-	images.map (image) => barf(mkpath(dest, image.name), image.contents)
-	files.map (file) => barf(mkpath(dest, file.name), file.contents)
-	barf mkpath(dest, 'icons.html'), html.join("\n")
+	images.map (image) => barf image.contents, dest, image.name
+	files.map (file) => barf file.contents, dest, file.name
+	barf html.join("\n"), dest, 'icons.html'
 	return mkpath(dest, manifestFileName)
 
 # ---------------------------------------------------------------------------

@@ -8,10 +8,9 @@ import {
 	} from '@jdeighan/base-utils'
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {fromTAML} from '@jdeighan/base-utils/taml'
+import {slurp, barf} from '@jdeighan/base-utils/fs'
 import {localStore} from '@jdeighan/coffee-utils/browser'
-import {
-	withExt, slurp, barf, newerDestFileExists,
-	} from '@jdeighan/coffee-utils/fs'
+import {withExt, newerDestFileExists} from '@jdeighan/coffee-utils/fs'
 
 # ---------------------------------------------------------------------------
 
@@ -251,7 +250,7 @@ export brewTamlFile = (srcPath, destPath=undef, hOptions={}) =>
 
 		tamlCode = slurp(srcPath)
 		jsCode = brewTamlStr(tamlCode, stub)
-		barf destPath, jsCode
+		barf jsCode, destPath
 	return
 
 # ---------------------------------------------------------------------------
