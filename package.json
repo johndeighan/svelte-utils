@@ -25,15 +25,15 @@
 	"author": "John Deighan",
 	"license": "MIT",
 	"dependencies": {
-		"@jdeighan/base-utils": "^6.0.3",
-		"@jdeighan/coffee-utils": "^16.0.8",
-		"@jdeighan/mapper": "^32.0.3",
+		"@jdeighan/base-utils": "^7.0.1",
+		"@jdeighan/coffee-utils": "^16.0.9",
+		"@jdeighan/mapper": "^32.0.4",
 		"magic-string": "^0.30.0",
 		"sorcery": "^0.11.0",
-		"svelte": "^3.59.1"
+		"svelte": "^4.0.0"
 	},
 	"devDependencies": {
-		"@jdeighan/unit-tester": "^3.0.55",
+		"@jdeighan/unit-tester": "^3.0.56",
 		"coffeescript": "^2.7.0",
 		"favicons": "^7.1.3"
 	},
