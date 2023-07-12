@@ -9,7 +9,9 @@ import {
 	fileExt, isFile, isDir, mkdirSync, execCmdSync,
 	} from '@jdeighan/coffee-utils/fs'
 
-import {isFunction, getOptions} from '@jdeighan/base-utils'
+import {
+	isString, isClass, isFunction, getOptions,
+	} from '@jdeighan/base-utils'
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {LOG} from '@jdeighan/base-utils/log'
 
@@ -111,3 +113,17 @@ export onInterval = (func, secs, doLog=false) =>
 		if doLog
 			LOG "destroying interval timer"
 		clearInterval interval
+
+# ---------------------------------------------------------------------------
+
+export makeReactive = (aClass, aMethod) =>
+
+	assert isClass(aClass), "aClass is not a class"
+	assert isString(aMethod), "aMethod is not a string"
+	func = aClass.prototype[aMethod]
+	assert isFunction(func), "aMethod is not a method"
+	newfunc = (lArgs...) =>
+		return func(lArgs...)
+	assert isFunction(newfunc), "newfunc is not a function"
+	aClass.prototype[aMethod] = newfunc
+	return undef

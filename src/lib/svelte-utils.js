@@ -19,6 +19,8 @@ import {
 } from '@jdeighan/coffee-utils/fs';
 
 import {
+  isString,
+  isClass,
   isFunction,
   getOptions
 } from '@jdeighan/base-utils';
@@ -122,4 +124,19 @@ export var onInterval = (func, secs, doLog = false) => {
     }
     return clearInterval(interval);
   };
+};
+
+// ---------------------------------------------------------------------------
+export var makeReactive = (aClass, aMethod) => {
+  var func, newfunc;
+  assert(isClass(aClass), "aClass is not a class");
+  assert(isString(aMethod), "aMethod is not a string");
+  func = aClass.prototype[aMethod];
+  assert(isFunction(func), "aMethod is not a method");
+  newfunc = (...lArgs) => {
+    return func(...lArgs);
+  };
+  assert(isFunction(newfunc), "newfunc is not a function");
+  aClass.prototype[aMethod] = newfunc;
+  return undef;
 };

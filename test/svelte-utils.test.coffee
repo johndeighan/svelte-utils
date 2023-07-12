@@ -4,6 +4,7 @@ import {assert} from '@jdeighan/base-utils/exceptions'
 import {utest} from '@jdeighan/unit-tester'
 import {
 	svelteSourceCodeEsc, svelteHtmlEsc, getManifestOptions,
+	genManifest, makeReactive,
 	} from '@jdeighan/svelte-utils'
 
 # ---------------------------------------------------------------------------

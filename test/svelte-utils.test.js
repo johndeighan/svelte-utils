@@ -10,7 +10,9 @@ import {
 import {
   svelteSourceCodeEsc,
   svelteHtmlEsc,
-  getManifestOptions
+  getManifestOptions,
+  genManifest,
+  makeReactive
 } from '@jdeighan/svelte-utils';
 
 // ---------------------------------------------------------------------------
