@@ -1,6 +1,6 @@
 {
 	"name": "@jdeighan/svelte-utils",
-	"version": "2.0.15",
+	"version": "2.0.16",
 	"type": "module",
 	"description": "A collection of svelte utility functions",
 	"engines": {
