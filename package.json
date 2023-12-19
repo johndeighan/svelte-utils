@@ -8,7 +8,6 @@
 	},
 	"exports": {
 		".": "./src/lib/svelte-utils.js",
-		"./sass": "./src/lib/sass.js",
 		"./preprocessors": "./src/lib/PreProcessors.js",
 		"./translator": "./src/lib/LanguageTranslator.js",
 		"./stores": "./src/lib/DataStores.js",
