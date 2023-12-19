@@ -1,6 +1,6 @@
 {
 	"name": "@jdeighan/svelte-utils",
-	"version": "2.0.17",
+	"version": "2.0.19",
 	"type": "module",
 	"description": "A collection of svelte utility functions",
 	"engines": {
@@ -8,7 +8,6 @@
 	},
 	"exports": {
 		".": "./src/lib/svelte-utils.js",
-		"./sass": "./src/lib/sass.js",
 		"./preprocessors": "./src/lib/PreProcessors.js",
 		"./translator": "./src/lib/LanguageTranslator.js",
 		"./stores": "./src/lib/DataStores.js",
@@ -31,7 +30,8 @@
 		"favicons": "^7.1.4",
 		"magic-string": "^0.30.1",
 		"sorcery": "^0.11.0",
-		"svelte": "^4.1.1"
+		"svelte": "^4.1.1",
+		"favicons": "^7.1.3"
 	},
 	"devDependencies": {
 		"@jdeighan/unit-tester": "^3.0.61",
