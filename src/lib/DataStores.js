@@ -33,9 +33,10 @@ import {
 } from '@jdeighan/base-utils/fs';
 
 import {
+  inBrowser,
   getLocalStore,
   setLocalStore
-} from '@jdeighan/coffee-utils/browser';
+} from '@jdeighan/browser';
 
 import {
   withExt,
@@ -72,14 +73,16 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     this.masterKey = masterKey1;
     
     // --- Check if this key exists in localStorage
-    storedVal = getLocalStore(this.masterKey);
+    if (inBrowser()) {
+      storedVal = getLocalStore(this.masterKey);
+    } else {
+      storedVal = defValue;
+    }
     if (debug) {
       console.log(`1. getLocalStore ${this.masterKey} = ${JSON.stringify(storedVal)}`);
     }
     if (defined(storedVal)) {
       this.set(storedVal);
-    } else {
-      this.set(defValue);
     }
   }
 
@@ -89,7 +92,9 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     if (debug) {
       console.log(`2. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
     }
-    setLocalStore(this.masterKey, value);
+    if (inBrowser()) {
+      setLocalStore(this.masterKey, value);
+    }
   }
 
   update(func) {
@@ -99,7 +104,9 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     if (debug) {
       console.log(`3. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
     }
-    setLocalStore(this.masterKey, value);
+    if (inBrowser()) {
+      setLocalStore(this.masterKey, value);
+    }
   }
 
 };

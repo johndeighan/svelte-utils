@@ -10,9 +10,7 @@ import {
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {fromTAML} from '@jdeighan/base-utils/taml'
 import {slurp, barf} from '@jdeighan/base-utils/fs'
-import {
-	getLocalStore, setLocalStore,
-	} from '@jdeighan/coffee-utils/browser'
+import {inBrowser, getLocalStore, setLocalStore} from '@jdeighan/browser'
 import {withExt, newerDestFileExists} from '@jdeighan/coffee-utils/fs'
 
 # ---------------------------------------------------------------------------
@@ -46,20 +44,23 @@ export class LocalStorageDataStore extends WritableDataStore
 		super defValue
 		
 		# --- Check if this key exists in localStorage
-		storedVal = getLocalStore @masterKey
+		if inBrowser()
+			storedVal = getLocalStore @masterKey
+		else
+			storedVal = defValue
+
 		if debug
 			console.log "1. getLocalStore #{@masterKey} = #{JSON.stringify(storedVal)}"
 		if defined(storedVal)
 			@set storedVal
-		else
-			@set defValue
 
 	set: (value) ->
 		assert defined(value), "set(): cannot set to undef"
 		super value
 		if debug
 			console.log "2. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
-		setLocalStore @masterKey, value
+		if inBrowser()
+			setLocalStore @masterKey, value
 		return
 
 	update: (func) ->
@@ -67,7 +68,8 @@ export class LocalStorageDataStore extends WritableDataStore
 		value = @store.get()
 		if debug
 			console.log "3. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
-		setLocalStore @masterKey, value
+		if inBrowser()
+			setLocalStore @masterKey, value
 		return
 
 # ---------------------------------------------------------------------------
