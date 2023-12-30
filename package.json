@@ -25,8 +25,8 @@
 	"license": "MIT",
 	"dependencies": {
 		"@jdeighan/base-utils": "^8.0.22",
-		"@jdeighan/coffee-utils": "^16.0.20",
-		"@jdeighan/mapper": "^32.0.10",
+		"@jdeighan/coffee-utils": "^16.0.21",
+		"@jdeighan/mapper": "^32.0.11",
 		"favicons": "^7.1.5",
 		"magic-string": "^0.30.5",
 		"sorcery": "^0.11.0",
