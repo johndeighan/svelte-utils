@@ -67,10 +67,11 @@ export var WritableDataStore = class WritableDataStore {
 
 // ---------------------------------------------------------------------------
 export var LocalStorageDataStore = class LocalStorageDataStore extends WritableDataStore {
-  constructor(masterKey1, defValue = undef, debug = false) {
+  constructor(masterKey1, defValue = undef, debug1 = false) {
     var storedVal;
     super(defValue);
     this.masterKey = masterKey1;
+    this.debug = debug1;
     
     // --- Check if this key exists in localStorage
     if (inBrowser()) {
@@ -78,7 +79,7 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     } else {
       storedVal = defValue;
     }
-    if (debug) {
+    if (this.debug) {
       console.log(`1. getLocalStore ${this.masterKey} = ${JSON.stringify(storedVal)}`);
     }
     if (defined(storedVal)) {
@@ -89,7 +90,7 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
   set(value) {
     assert(defined(value), "set(): cannot set to undef");
     super.set(value);
-    if (debug) {
+    if (this.debug) {
       console.log(`2. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
     }
     if (inBrowser()) {
@@ -101,7 +102,7 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     var value;
     super.update(func);
     value = this.store.get();
-    if (debug) {
+    if (this.debug) {
       console.log(`3. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
     }
     if (inBrowser()) {

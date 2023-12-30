@@ -37,7 +37,7 @@ export class WritableDataStore
 
 export class LocalStorageDataStore extends WritableDataStore
 
-	constructor: (@masterKey, defValue=undef, debug=false) ->
+	constructor: (@masterKey, defValue=undef, @debug=false) ->
 
 		# --- CoffeeScript forces us to call super first
 		#     so we can't get the localStorage value first
@@ -49,7 +49,7 @@ export class LocalStorageDataStore extends WritableDataStore
 		else
 			storedVal = defValue
 
-		if debug
+		if @debug
 			console.log "1. getLocalStore #{@masterKey} = #{JSON.stringify(storedVal)}"
 		if defined(storedVal)
 			@set storedVal
@@ -57,7 +57,7 @@ export class LocalStorageDataStore extends WritableDataStore
 	set: (value) ->
 		assert defined(value), "set(): cannot set to undef"
 		super value
-		if debug
+		if @debug
 			console.log "2. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
 		if inBrowser()
 			setLocalStore @masterKey, value
@@ -66,7 +66,7 @@ export class LocalStorageDataStore extends WritableDataStore
 	update: (func) ->
 		super func
 		value = @store.get()
-		if debug
+		if @debug
 			console.log "3. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
 		if inBrowser()
 			setLocalStore @masterKey, value
