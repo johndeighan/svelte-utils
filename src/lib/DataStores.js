@@ -3,8 +3,7 @@ import pathlib from 'path';
 
 import {
   writable,
-  readable,
-  get
+  readable
 } from 'svelte/store';
 
 import {
@@ -13,7 +12,10 @@ import {
   notdefined,
   pass,
   range,
-  getOptions
+  getOptions,
+  isString,
+  isHash,
+  isFunction
 } from '@jdeighan/base-utils';
 
 import {
@@ -31,7 +33,8 @@ import {
 } from '@jdeighan/base-utils/fs';
 
 import {
-  localStore
+  getLocalStore,
+  setLocalStore
 } from '@jdeighan/coffee-utils/browser';
 
 import {
@@ -40,32 +43,9 @@ import {
 } from '@jdeighan/coffee-utils/fs';
 
 // ---------------------------------------------------------------------------
-export var StaticDataStore = class StaticDataStore {
-  constructor(value) {
-    this.value = value;
-  }
-
-  subscribe(cbFunc) {
-    cbFunc(this.value);
-    return function() {
-      return pass();
-    };
-  }
-
-  set(val) {
-    return croak("Can't set() a StaticDataStore");
-  }
-
-  update(func) {
-    return croak("Can't update() a StaticDataStore");
-  }
-
-};
-
-// ---------------------------------------------------------------------------
 export var WritableDataStore = class WritableDataStore {
-  constructor(value = undef) {
-    this.store = writable(value);
+  constructor(defValue = undef) {
+    this.store = writable(defValue);
   }
 
   subscribe(func) {
@@ -73,10 +53,12 @@ export var WritableDataStore = class WritableDataStore {
   }
 
   set(value) {
+    assert(defined(value), "stored value must be defined");
     this.store.set(value);
   }
 
   update(func) {
+    assert(isFunction(func), "Not a function");
     this.store.update(func);
   }
 
@@ -84,43 +66,57 @@ export var WritableDataStore = class WritableDataStore {
 
 // ---------------------------------------------------------------------------
 export var LocalStorageDataStore = class LocalStorageDataStore extends WritableDataStore {
-  constructor(masterKey1, defValue = undef) {
-    var value;
+  constructor(masterKey1, defValue = undef, debug = false) {
+    var storedVal;
     super(defValue);
     this.masterKey = masterKey1;
-    value = localStore(this.masterKey);
-    if (defined(value)) {
-      this.set(value);
+    
+    // --- Check if this key exists in localStorage
+    storedVal = getLocalStore(this.masterKey);
+    if (debug) {
+      console.log(`1. getLocalStore ${this.masterKey} = ${JSON.stringify(storedVal)}`);
+    }
+    if (defined(storedVal)) {
+      this.set(storedVal);
+    } else {
+      this.set(defValue);
     }
   }
 
-  // --- I'm assuming that when update() is called,
-  //     set() will also be called
   set(value) {
     assert(defined(value), "set(): cannot set to undef");
     super.set(value);
-    localStore(this.masterKey, value);
+    if (debug) {
+      console.log(`2. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
+    }
+    setLocalStore(this.masterKey, value);
   }
 
   update(func) {
+    var value;
     super.update(func);
-    localStore(this.masterKey, get(this.store));
+    value = this.store.get();
+    if (debug) {
+      console.log(`3. setLocalStore ${this.masterKey} = ${JSON.stringify(value)}`);
+    }
+    setLocalStore(this.masterKey, value);
   }
 
 };
 
 // ---------------------------------------------------------------------------
 export var PropsDataStore = class PropsDataStore extends LocalStorageDataStore {
-  constructor(masterKey, defValue = undef) {
-    super(masterKey, {});
+  constructor(masterKey, hDefaults = undef, debug = false) {
+    assert(isHash(hDefaults), "hPrefs must be a hash");
+    super(masterKey, hDefaults, debug);
   }
 
-  setProp(name, value) {
-    assert(defined(name), "PropStore.setProp(): empty key");
-    this.update(function(hPrefs) {
-      hPrefs[name] = value;
-      return hPrefs;
-    });
+};
+
+// ---------------------------------------------------------------------------
+export var PrefsDataStore = class PrefsDataStore extends PropsDataStore {
+  constructor(hDefaults, debug = false) {
+    super('hPrefs', hDefaults, debug);
   }
 
 };

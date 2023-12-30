@@ -1,50 +1,37 @@
 # DataStores.coffee
 
 import pathlib from 'path'
-import {writable, readable, get} from 'svelte/store'
+import {writable, readable} from 'svelte/store'
 
 import {
 	undef, defined, notdefined, pass, range, getOptions,
+	isString, isHash, isFunction,
 	} from '@jdeighan/base-utils'
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {fromTAML} from '@jdeighan/base-utils/taml'
 import {slurp, barf} from '@jdeighan/base-utils/fs'
-import {localStore} from '@jdeighan/coffee-utils/browser'
+import {
+	getLocalStore, setLocalStore,
+	} from '@jdeighan/coffee-utils/browser'
 import {withExt, newerDestFileExists} from '@jdeighan/coffee-utils/fs'
-
-# ---------------------------------------------------------------------------
-
-export class StaticDataStore
-
-	constructor: (value) ->
-		@value = value
-
-	subscribe: (cbFunc) ->
-		cbFunc @value
-		return () ->
-			pass()
-
-	set: (val) ->
-		croak "Can't set() a StaticDataStore"
-
-	update: (func) ->
-		croak "Can't update() a StaticDataStore"
 
 # ---------------------------------------------------------------------------
 
 export class WritableDataStore
 
-	constructor: (value=undef) ->
-		@store = writable value
+	constructor: (defValue=undef) ->
+		@store = writable defValue
 
 	subscribe: (func) ->
 		return @store.subscribe(func)
 
 	set: (value) ->
+		assert defined(value), "stored value must be defined"
 		@store.set(value)
 		return
 
 	update: (func) ->
+		assert isFunction(func), "Not a function"
 		@store.update(func)
 		return
 
@@ -52,43 +39,51 @@ export class WritableDataStore
 
 export class LocalStorageDataStore extends WritableDataStore
 
-	constructor: (@masterKey, defValue=undef) ->
+	constructor: (@masterKey, defValue=undef, debug=false) ->
 
 		# --- CoffeeScript forces us to call super first
 		#     so we can't get the localStorage value first
 		super defValue
-		value = localStore(@masterKey)
-		if defined(value)
-			@set value
-
-	# --- I'm assuming that when update() is called,
-	#     set() will also be called
+		
+		# --- Check if this key exists in localStorage
+		storedVal = getLocalStore @masterKey
+		if debug
+			console.log "1. getLocalStore #{@masterKey} = #{JSON.stringify(storedVal)}"
+		if defined(storedVal)
+			@set storedVal
+		else
+			@set defValue
 
 	set: (value) ->
 		assert defined(value), "set(): cannot set to undef"
 		super value
-		localStore @masterKey, value
+		if debug
+			console.log "2. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
+		setLocalStore @masterKey, value
 		return
 
 	update: (func) ->
 		super func
-		localStore @masterKey, get(@store)
+		value = @store.get()
+		if debug
+			console.log "3. setLocalStore #{@masterKey} = #{JSON.stringify(value)}"
+		setLocalStore @masterKey, value
 		return
 
 # ---------------------------------------------------------------------------
 
 export class PropsDataStore extends LocalStorageDataStore
 
-	constructor: (masterKey, defValue=undef) ->
-		super masterKey, {}
+	constructor: (masterKey, hDefaults=undef, debug=false) ->
+		assert isHash(hDefaults), "hPrefs must be a hash"
+		super masterKey, hDefaults, debug
 
-	setProp: (name, value) ->
+# ---------------------------------------------------------------------------
 
-		assert defined(name), "PropStore.setProp(): empty key"
-		@update (hPrefs) ->
-			hPrefs[name] = value
-			return hPrefs
-		return
+export class PrefsDataStore extends PropsDataStore
+
+	constructor: (hDefaults, debug=false) ->
+		super 'hPrefs', hDefaults, debug
 
 # ---------------------------------------------------------------------------
 
