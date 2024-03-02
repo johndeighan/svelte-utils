@@ -29,7 +29,9 @@ import {
 
 import {
   slurp,
-  barf
+  barf,
+  withExt,
+  newerDestFileExists
 } from '@jdeighan/base-utils/fs';
 
 import {
@@ -37,11 +39,6 @@ import {
   getLocalStore,
   setLocalStore
 } from '@jdeighan/browser';
-
-import {
-  withExt,
-  newerDestFileExists
-} from '@jdeighan/coffee-utils/fs';
 
 // ---------------------------------------------------------------------------
 export var WritableDataStore = class WritableDataStore {
@@ -72,7 +69,6 @@ export var LocalStorageDataStore = class LocalStorageDataStore extends WritableD
     super(defValue);
     this.masterKey = masterKey1;
     this.debug = debug1;
-    
     // --- Check if this key exists in localStorage
     if (inBrowser()) {
       storedVal = getLocalStore(this.masterKey);
@@ -314,3 +310,5 @@ export var brewTamlFile = (srcPath, destPath = undef, hOptions = {}) => {
 };
 
 // ---------------------------------------------------------------------------
+
+//# sourceMappingURL=DataStores.js.map

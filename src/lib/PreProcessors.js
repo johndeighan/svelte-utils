@@ -14,7 +14,8 @@ import {
   splitPrefix,
   DUMP,
   mapEachLine,
-  OL
+  OL,
+  LOG
 } from '@jdeighan/base-utils';
 
 import {
@@ -24,51 +25,14 @@ import {
 import {
   dbgEnter,
   dbgReturn,
-  dbg
+  dbg,
+  setDebugging
 } from '@jdeighan/base-utils/debug';
 
 // --- NOTE: the marker must be taken as a comment by CoffeeScript
 export var marker = "# |||| $:";
 
 export var jsmarker = marker.replace('#', '//');
-
-// ---------------------------------------------------------------------------
-export var coffeePreProcessor = ({content, attributes, filename}) => {
-  var code, coffeeCode, coffeeMap, debug, jsCode, lang, postMap, preMap;
-  ({lang, debug} = attributes);
-  if (!lang) {
-    return undef;
-  }
-  lang = lang.toLowerCase();
-  if ((lang !== 'coffee') && (lang !== 'coffeescript')) {
-    return undef;
-  }
-  if (debug) {
-    DUMP('original content', content);
-  }
-  ({
-    code: coffeeCode,
-    map: preMap
-  } = preProc(content));
-  if (debug) {
-    DUMP('coffeeCode - between preProc & brew', coffeeCode);
-  }
-  ({
-    code: jsCode,
-    map: coffeeMap
-  } = brew(coffeeCode, {debug}));
-  if (debug) {
-    DUMP('jsCode - between brew & postProc', jsCode);
-  }
-  ({
-    code,
-    map: postMap
-  } = postProc(jsCode));
-  if (debug) {
-    DUMP('code - after postProc', code);
-  }
-  return {code};
-};
 
 // ---------------------------------------------------------------------------
 export var preProc = (block) => {
@@ -127,30 +91,6 @@ export var preProc = (block) => {
 };
 
 // ---------------------------------------------------------------------------
-export var brew = (coffeeCode, hOptions = {}) => {
-  var debug, err, result;
-  ({debug} = hOptions);
-  try {
-    result = CoffeeScript.compile(coffeeCode, {
-      bare: true,
-      header: false,
-      sourceMap: true
-    });
-    if (debug) {
-      console.log("brew(): OK");
-    }
-    return {
-      code: result.js,
-      map: result.v3SourceMap
-    };
-  } catch (error) {
-    err = error;
-    console.log(err);
-    throw err;
-  }
-};
-
-// ---------------------------------------------------------------------------
 export var postProc = (content) => {
   var code, reactiveStmtFlag;
   reactiveStmtFlag = false;
@@ -177,6 +117,68 @@ export var postProc = (content) => {
 };
 
 // ---------------------------------------------------------------------------
+export var coffeePreProcessor = ({content, attributes, filename}) => {
+  var code, coffeeCode, coffeeMap, debug, jsCode, lang, postMap, preMap;
+  ({lang, debug} = attributes);
+  if (!lang) {
+    return undef;
+  }
+  lang = lang.toLowerCase();
+  if ((lang !== 'coffee') && (lang !== 'coffeescript')) {
+    return undef;
+  }
+  if (debug) {
+    DUMP('original content', content);
+  }
+  ({
+    code: coffeeCode,
+    map: preMap
+  } = preProc(content));
+  if (debug) {
+    DUMP('coffeeCode - between preProc & brew', coffeeCode);
+  }
+  ({
+    code: jsCode,
+    map: coffeeMap
+  } = brew(coffeeCode, {debug}));
+  if (debug) {
+    DUMP('jsCode - between brew & postProc', jsCode);
+  }
+  ({
+    code,
+    map: postMap
+  } = postProc(jsCode));
+  if (debug) {
+    DUMP('code - after postProc', code);
+  }
+  return {code};
+};
+
+// ---------------------------------------------------------------------------
+export var brew = (coffeeCode, hOptions = {}) => {
+  var debug, err, result;
+  ({debug} = hOptions);
+  try {
+    result = CoffeeScript.compile(coffeeCode, {
+      bare: true,
+      header: false,
+      sourceMap: true
+    });
+    if (debug) {
+      console.log("brew(): OK");
+    }
+    return {
+      code: result.js,
+      map: result.v3SourceMap
+    };
+  } catch (error) {
+    err = error;
+    console.log(err);
+    throw err;
+  }
+};
+
+// ---------------------------------------------------------------------------
 export var i18nPreProcessor = ({content, attributes, filename}) => {
   var replacer, s;
   s = new MagicString(content);
@@ -190,3 +192,5 @@ export var i18nPreProcessor = ({content, attributes, filename}) => {
     map: s.generateMap()
   };
 };
+
+//# sourceMappingURL=PreProcessors.js.map

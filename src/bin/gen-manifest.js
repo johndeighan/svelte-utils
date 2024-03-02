@@ -18,3 +18,5 @@ fname = (await genManifest({
 }));
 
 console.log(`Manifest file at ${fname}`);
+
+//# sourceMappingURL=gen-manifest.js.map

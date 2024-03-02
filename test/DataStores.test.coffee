@@ -2,7 +2,7 @@
 
 import {undef} from '@jdeighan/base-utils'
 import {assert} from '@jdeighan/base-utils/exceptions'
-import {utest} from '@jdeighan/unit-tester'
+import {equal} from '@jdeighan/base-utils/utest'
 import {
 	WritableDataStore, LocalStorageDataStore, PropsDataStore,
 	TAMLDataStore,
@@ -21,7 +21,7 @@ import {
 	value = undef
 	unsub = store.subscribe((val) -> value = val)
 
-	utest.equal 21, value, ['a','b','c']
+	equal value, ['a','b','c']
 	unsub()
 	)()
 

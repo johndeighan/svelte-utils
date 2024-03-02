@@ -4,8 +4,8 @@ import {
 } from '@jdeighan/base-utils/exceptions';
 
 import {
-  utest
-} from '@jdeighan/unit-tester';
+  equal
+} from '@jdeighan/base-utils/utest';
 
 import {
   svelteSourceCodeEsc,
@@ -16,11 +16,11 @@ import {
 } from '@jdeighan/svelte-utils';
 
 // ---------------------------------------------------------------------------
-utest.equal(11, svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;');
+equal(svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;');
 
-utest.equal(12, svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;');
+equal(svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;');
 
-utest.equal(14, getManifestOptions(), {
+equal(getManifestOptions(), {
   src: "./static/favicon.svg",
   dest: "./static/favicons",
   path: "/favicons",
@@ -45,7 +45,7 @@ utest.equal(14, getManifestOptions(), {
   }
 });
 
-utest.equal(33, getManifestOptions({
+equal(getManifestOptions({
   developerName: 'John Deighan'
 }), {
   src: "./static/favicon.svg",
@@ -72,7 +72,7 @@ utest.equal(33, getManifestOptions({
   }
 });
 
-utest.equal(56, getManifestOptions({
+equal(getManifestOptions({
   appName: 'Super App'
 }), {
   src: "./static/favicon.svg",
@@ -98,3 +98,5 @@ utest.equal(56, getManifestOptions({
     }
   }
 });
+
+//# sourceMappingURL=svelte-utils.test.js.map

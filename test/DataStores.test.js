@@ -8,8 +8,8 @@ import {
 } from '@jdeighan/base-utils/exceptions';
 
 import {
-  utest
-} from '@jdeighan/unit-tester';
+  equal
+} from '@jdeighan/base-utils/utest';
 
 import {
   WritableDataStore,
@@ -29,6 +29,8 @@ import {
   unsub = store.subscribe(function(val) {
     return value = val;
   });
-  utest.equal(21, value, ['a', 'b', 'c']);
+  equal(value, ['a', 'b', 'c']);
   return unsub();
 })();
+
+//# sourceMappingURL=DataStores.test.js.map

@@ -6,42 +6,16 @@ import sorcery from 'sorcery'
 
 import {
 	undef, defined, notdefined, isEmpty, nonEmpty,
-	splitPrefix, DUMP, mapEachLine, OL,
+	splitPrefix, DUMP, mapEachLine, OL, LOG,
 	} from '@jdeighan/base-utils'
 import {assert} from '@jdeighan/base-utils/exceptions'
-import {dbgEnter, dbgReturn, dbg} from '@jdeighan/base-utils/debug'
+import {
+	dbgEnter, dbgReturn, dbg, setDebugging,
+	} from '@jdeighan/base-utils/debug'
 
 # --- NOTE: the marker must be taken as a comment by CoffeeScript
 export marker = "# |||| $:"
 export jsmarker = marker.replace('#', '//')
-
-# ---------------------------------------------------------------------------
-
-export coffeePreProcessor = ({content, attributes, filename}) =>
-
-	{lang, debug} = attributes
-	if ! lang
-		return undef
-	lang = lang.toLowerCase()
-	if (lang != 'coffee') && (lang != 'coffeescript')
-		return undef
-
-	if debug
-		DUMP 'original content', content
-
-	{code: coffeeCode, map: preMap} = preProc(content)
-	if debug
-		DUMP 'coffeeCode - between preProc & brew', coffeeCode
-	{code: jsCode, map: coffeeMap} = brew(coffeeCode, {debug})
-	if debug
-		DUMP 'jsCode - between brew & postProc', jsCode
-	{code, map: postMap} = postProc(jsCode)
-	if debug
-		DUMP 'code - after postProc', code
-
-	return {
-		code
-		}
 
 # ---------------------------------------------------------------------------
 
@@ -106,27 +80,6 @@ export preProc = (block) =>
 
 # ---------------------------------------------------------------------------
 
-export brew = (coffeeCode, hOptions={}) =>
-
-	{debug} = hOptions
-	try
-		result = CoffeeScript.compile(coffeeCode, {
-			bare: true
-			header: false
-			sourceMap: true
-			})
-		if debug
-			console.log "brew(): OK"
-		return {
-			code: result.js
-			map:  result.v3SourceMap
-			}
-	catch err
-		console.log err
-		throw err
-
-# ---------------------------------------------------------------------------
-
 export postProc = (content) =>
 
 	reactiveStmtFlag = false
@@ -150,6 +103,55 @@ export postProc = (content) =>
 		code
 		map: undef
 		}
+
+# ---------------------------------------------------------------------------
+
+export coffeePreProcessor = ({content, attributes, filename}) =>
+
+	{lang, debug} = attributes
+	if ! lang
+		return undef
+	lang = lang.toLowerCase()
+	if (lang != 'coffee') && (lang != 'coffeescript')
+		return undef
+
+	if debug
+		DUMP 'original content', content
+
+	{code: coffeeCode, map: preMap} = preProc(content)
+	if debug
+		DUMP 'coffeeCode - between preProc & brew', coffeeCode
+	{code: jsCode, map: coffeeMap} = brew(coffeeCode, {debug})
+	if debug
+		DUMP 'jsCode - between brew & postProc', jsCode
+	{code, map: postMap} = postProc(jsCode)
+	if debug
+		DUMP 'code - after postProc', code
+
+	return {
+		code
+		}
+
+# ---------------------------------------------------------------------------
+
+export brew = (coffeeCode, hOptions={}) =>
+
+	{debug} = hOptions
+	try
+		result = CoffeeScript.compile(coffeeCode, {
+			bare: true
+			header: false
+			sourceMap: true
+			})
+		if debug
+			console.log "brew(): OK"
+		return {
+			code: result.js
+			map:  result.v3SourceMap
+			}
+	catch err
+		console.log err
+		throw err
 
 # ---------------------------------------------------------------------------
 

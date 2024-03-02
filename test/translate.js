@@ -27,3 +27,5 @@ console.log(`${str} => ${translated}`);
 translated = (await mstrans.translate(str, 'en', 'zh'));
 
 console.log(`${str} => ${translated}`);
+
+//# sourceMappingURL=translate.js.map

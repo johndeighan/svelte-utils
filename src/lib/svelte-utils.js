@@ -6,23 +6,11 @@ import fs from 'fs/promises';
 import pathLib from 'path';
 
 import {
-  mkpath,
-  barf
-} from '@jdeighan/base-utils/fs';
-
-import {
-  fileExt,
-  isFile,
-  isDir,
-  mkdirSync,
-  execCmdSync
-} from '@jdeighan/coffee-utils/fs';
-
-import {
   isString,
   isClass,
   isFunction,
-  getOptions
+  getOptions,
+  execCmd
 } from '@jdeighan/base-utils';
 
 import {
@@ -33,6 +21,18 @@ import {
 import {
   LOG
 } from '@jdeighan/base-utils/log';
+
+import {
+  mkpath,
+  barf
+} from '@jdeighan/base-utils/fs';
+
+import {
+  fileExt,
+  isFile,
+  isDir,
+  mkDir
+} from '@jdeighan/coffee-utils/fs';
 
 // ---------------------------------------------------------------------------
 //   svelteSourceCodeEsc - to display source code for a *.starbucks page
@@ -95,7 +95,7 @@ export var genManifest = async(hOptions = {}) => {
   hOptions = getManifestOptions(hOptions);
   ({dest, src, manifestFileName} = hOptions);
   if (!isDir(dest)) {
-    mkdirSync(dest);
+    mkdir(dest);
   }
   assert(fileExt(src).toLowerCase() === '.svg', "Source not an SVG file");
   ({images, files, html} = (await favicons(src, hOptions)));
@@ -140,3 +140,5 @@ export var makeReactive = (aClass, aMethod) => {
   aClass.prototype[aMethod] = newfunc;
   return undef;
 };
+
+//# sourceMappingURL=svelte-utils.js.map

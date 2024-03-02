@@ -9,9 +9,12 @@ import {
 	} from '@jdeighan/base-utils'
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {fromTAML} from '@jdeighan/base-utils/taml'
-import {slurp, barf} from '@jdeighan/base-utils/fs'
-import {inBrowser, getLocalStore, setLocalStore} from '@jdeighan/browser'
-import {withExt, newerDestFileExists} from '@jdeighan/coffee-utils/fs'
+import {
+	slurp, barf, withExt, newerDestFileExists,
+	} from '@jdeighan/base-utils/fs'
+import {
+	inBrowser, getLocalStore, setLocalStore,
+	} from '@jdeighan/browser'
 
 # ---------------------------------------------------------------------------
 
@@ -42,7 +45,7 @@ export class LocalStorageDataStore extends WritableDataStore
 		# --- CoffeeScript forces us to call super first
 		#     so we can't get the localStorage value first
 		super defValue
-		
+
 		# --- Check if this key exists in localStorage
 		if inBrowser()
 			storedVal = getLocalStore @masterKey

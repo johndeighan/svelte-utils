@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "gen-manifest.js",
+  "sourceRoot": "..\\..\\",
+  "sources": [
+    "src\\bin\\gen-manifest.coffee"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,IAAA;;AAIA,OAAA;;EAAQ,KAAR;CAAA,MAAA;;AACA,OAAA;EAAQ,WAAR;CAAA,MAAA;;AAEA,KAAA,GAAQ,CAAA,MAAM,WAAA,CAAY;EACzB,OAAA,EAAS,WADgB;EAEzB,YAAA,EAAc,OAFW;EAGzB,aAAA,EAAe;AAHU,CAAZ,CAAN;;AAMR,OAAO,CAAC,GAAR,CAAY,CAAA,iBAAA,CAAA,CAAoB,KAApB,CAAA,CAAZ",
+  "sourcesContent": [
+    "`#!/usr/bin/env node\r\n`\r\n# gen-manifest.coffee\r\n\r\nimport {undef} from '@jdeighan/base-utils'\r\nimport {genManifest} from '@jdeighan/svelte-utils'\r\n\r\nfname = await genManifest({\r\n\tappName: 'Super App'\r\n\tappShortName: 'Super'\r\n\tdeveloperName: 'John Deighan'\r\n\t})\r\n\r\nconsole.log \"Manifest file at #{fname}\"\r\n"
+  ]
+}

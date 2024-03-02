@@ -1,7 +1,7 @@
 # svelte-utils.test.coffee
 
 import {assert} from '@jdeighan/base-utils/exceptions'
-import {utest} from '@jdeighan/unit-tester'
+import {equal} from '@jdeighan/base-utils/utest'
 import {
 	svelteSourceCodeEsc, svelteHtmlEsc, getManifestOptions,
 	genManifest, makeReactive,
@@ -9,10 +9,10 @@ import {
 
 # ---------------------------------------------------------------------------
 
-utest.equal 11, svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;'
-utest.equal 12, svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;'
+equal svelteSourceCodeEsc('<abc>'), '&lt;abc&gt;'
+equal svelteHtmlEsc('{abc}'), '&lbrace;abc&rbrace;'
 
-utest.equal 14, getManifestOptions(), {
+equal getManifestOptions(), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"
@@ -33,7 +33,7 @@ utest.equal 14, getManifestOptions(), {
 		android: manifestFileName: 'manifest.json'
 	}
 
-utest.equal 33, getManifestOptions({developerName: 'John Deighan'}), {
+equal getManifestOptions({developerName: 'John Deighan'}), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"
@@ -54,7 +54,7 @@ utest.equal 33, getManifestOptions({developerName: 'John Deighan'}), {
 		android: manifestFileName: 'manifest.json'
 	}
 
-utest.equal 56, getManifestOptions({appName: 'Super App'}), {
+equal getManifestOptions({appName: 'Super App'}), {
 	src: "./static/favicon.svg",
 	dest: "./static/favicons",
 	path: "/favicons"

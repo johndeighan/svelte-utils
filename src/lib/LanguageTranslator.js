@@ -123,3 +123,5 @@ export var MSTranslator = class MSTranslator extends LanguageTranslator {
   }
 
 };
+
+//# sourceMappingURL=LanguageTranslator.js.map

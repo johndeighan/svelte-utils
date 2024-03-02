@@ -4,16 +4,16 @@ import favicons from 'favicons'
 import fs from 'fs/promises'
 import pathLib from 'path'
 
-import {mkpath, barf} from '@jdeighan/base-utils/fs'
 import {
-	fileExt, isFile, isDir, mkdirSync, execCmdSync,
-	} from '@jdeighan/coffee-utils/fs'
-
-import {
-	isString, isClass, isFunction, getOptions,
+	isString, isClass, isFunction, getOptions, execCmd,
 	} from '@jdeighan/base-utils'
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {LOG} from '@jdeighan/base-utils/log'
+import {mkpath, barf} from '@jdeighan/base-utils/fs'
+import {
+	fileExt, isFile, isDir, mkDir,
+	} from '@jdeighan/coffee-utils/fs'
+
 
 # ---------------------------------------------------------------------------
 #   svelteSourceCodeEsc - to display source code for a *.starbucks page
@@ -89,7 +89,7 @@ export genManifest = (hOptions={}) =>
 
 	# --- Create destination folder if it doesn't exist
 	if ! isDir dest
-		mkdirSync dest
+		mkdir dest
 
 	assert (fileExt(src).toLowerCase() == '.svg'), "Source not an SVG file"
 	{images, files, html} = await favicons(src, hOptions)
