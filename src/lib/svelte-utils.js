@@ -32,7 +32,7 @@ import {
   isFile,
   isDir,
   mkDir
-} from '@jdeighan/coffee-utils/fs';
+} from '@jdeighan/base-utils/fs';
 
 // ---------------------------------------------------------------------------
 //   svelteSourceCodeEsc - to display source code for a *.starbucks page

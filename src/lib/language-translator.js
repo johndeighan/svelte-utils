@@ -1,4 +1,4 @@
-// LanguageTranslator.coffee
+// language-translator.coffee
 import fetch from 'node-fetch';
 
 import {
@@ -124,4 +124,4 @@ export var MSTranslator = class MSTranslator extends LanguageTranslator {
 
 };
 
-//# sourceMappingURL=LanguageTranslator.js.map
+//# sourceMappingURL=language-translator.js.map

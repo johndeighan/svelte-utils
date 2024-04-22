@@ -1,13 +1,12 @@
-# PreProcessors.test.coffee
+# preprocessors.test.coffee
 
 import prettierSync from '@prettier/sync'
 {format} = prettierSync
 
-import {undef, LOG, spaces} from '@jdeighan/base-utils'
+import {undef, spaces} from '@jdeighan/base-utils'
 import {setDebugging} from '@jdeighan/base-utils/debug'
 import {UnitTester} from '@jdeighan/base-utils/utest'
 import {
-	preProc, postProc, marker, jsmarker, brew,
 	coffeePreProcessor, i18nPreProcessor,
 	} from '@jdeighan/svelte-utils/preprocessors'
 
@@ -17,308 +16,21 @@ sp = spaces(1)
 
 (() =>
 	u = new UnitTester()
-	u.transformValue = (block) ->
-		return preProc(block).code
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statements
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		$: fullName = "\#{fName} \#{lName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
-		fullName = "\#{fName} \#{lName}"
-		"""
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#reactive fullName = "\#{fName} \#{lName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
-		fullName = "\#{fName} \#{lName}"
-		"""
-
-	# ------------------------------------------------------------------------
-	# --- test reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		$:
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		if true #{marker}
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		"""
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#reactive
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		if true #{marker}
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		"""
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statement with reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		$: fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
-		fullName = "\#{fName} \#{lName}"
-		if true #{marker}
-			console.log "fullName becomes \#{fullName}"
-		"""
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#reactive fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
-		fullName = "\#{fName} \#{lName}"
-		if true #{marker}
-			console.log "fullName becomes \#{fullName}"
-		"""
-	)()
-
-# ---------------------------------------------------------------------------
-
-(() =>
-	u = new UnitTester()
-	u.transformValue = (block) ->
-		return postProc(block).code
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statements
-
-	u.equal """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		#{jsmarker}
-		fullName = `${fName} ${lName}`;
-
-		""", """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		$: fullName = `${fName} ${lName}`;
-
-		"""
-
-	# ------------------------------------------------------------------------
-	# --- test reactive block
-
-	u.equal """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		if (true) { #{jsmarker}
-		#{sp}#{sp}fullName = `${fName} ${lName}`;
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		""", """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		$: {
-		#{sp}#{sp}fullName = `${fName} ${lName}`;
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		"""
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statement with reactive block
-
-	u.equal """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		#{jsmarker}
-		fullName = `${fName} ${lName}`;
-
-		if (true) { #{jsmarker}
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		""", """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		$: fullName = `${fName} ${lName}`;
-
-		$: {
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		"""
-	)()
-
-# ---------------------------------------------------------------------------
-
-(() =>
-
-	normalize = (jsStr) ->
-
-		result = format(jsStr, {
-			parser: 'flow'
-			useTabs: true
-			})
-		return result.replace(/\n\n+/sg, "\n")
-
-	# ------------------------------------------------------------------------
-
-	u = new UnitTester()
-	u.transformValue = (code) =>
-		hResult = coffeePreProcessor({
-			content: code
+	u.transformValue = (coffeeCode) ->
+		result = coffeePreProcessor({
+			content: coffeeCode,
 			attributes: {
 				lang: 'coffee'
 				}
-			filename: 'example.svelte'
 			})
-		return normalize(hResult.code)
-	u.transformExpected = normalize
+		return result.code
 
 	# ------------------------------------------------------------------------
-	# Test normal JS
+	# --- test CoffeeScript to JavaScript conversion
 
 	u.equal """
 		fName = 'John'
 		lName = 'Deighan'
-		""", """
-		var fName, lName;
-		fName = 'John';
-		lName = 'Deighan';
-		"""
-
-	# ------------------------------------------------------------------------
-	# Test reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-		$:
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		var fName, fullName, lName;
-		fName = 'John';
-		lName = 'Deighan';
-		$: {
-			fullName = `${fName} ${lName}`;
-			console.log(`fullName becomes ${fullName}`);
-			}
-		"""
-
-	# ------------------------------------------------------------------------
-	# Test reactive statement
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-		$: fullName = "\#{fName} \#{lName}"
-		""", """
-		var fName, fullName, lName;
-		fName = 'John';
-		lName = 'Deighan';
-		$: fullName = `${fName} ${lName}`;
-		"""
-
-	# ------------------------------------------------------------------------
-	# Test reactive statement with reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-		$: fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		var fName, fullName, lName;
-		fName = 'John';
-		lName = 'Deighan';
-		$: fullName = `${fName} ${lName}`;
-		$: {
-			console.log(`fullName becomes \${fullName}`);
-			}
-		"""
-
-	)()
-
-# ---------------------------------------------------------------------------
-
-(() =>
-	u = new UnitTester()
-	u.transformValue = (block) ->
-		return brew(block).code
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statements
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
 		fullName = "\#{fName} \#{lName}"
 		""", """
 		var fName, fullName, lName;
@@ -327,61 +39,9 @@ sp = spaces(1)
 
 		lName = 'Deighan';
 
-		#{jsmarker}
 		fullName = `${fName} ${lName}`;
-
 		"""
 
-	# ------------------------------------------------------------------------
-	# --- test reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		if true #{marker}
-			fullName = "\#{fName} \#{lName}"
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		if (true) { #{jsmarker}
-		#{sp}#{sp}fullName = `${fName} ${lName}`;
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		"""
-
-	# ------------------------------------------------------------------------
-	# --- test reactive statement with reactive block
-
-	u.equal """
-		fName = 'John'
-		lName = 'Deighan'
-
-		#{marker}
-		fullName = "\#{fName} \#{lName}"
-		if true #{marker}
-			console.log "fullName becomes \#{fullName}"
-		""", """
-		var fName, fullName, lName;
-
-		fName = 'John';
-
-		lName = 'Deighan';
-
-		#{jsmarker}
-		fullName = `${fName} ${lName}`;
-
-		if (true) { #{jsmarker}
-		#{sp}#{sp}console.log(`fullName becomes ${fullName}`);
-		}
-
-		"""
 	)()
 
 # ---------------------------------------------------------------------------

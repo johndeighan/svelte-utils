@@ -1,4 +1,4 @@
-// DataStores.coffee
+// data-stores.coffee
 import pathlib from 'path';
 
 import {
@@ -31,7 +31,7 @@ import {
   slurp,
   barf,
   withExt,
-  newerDestFileExists
+  newerDestFilesExist
 } from '@jdeighan/base-utils/fs';
 
 import {
@@ -300,7 +300,7 @@ export var brewTamlFile = (srcPath, destPath = undef, hOptions = {}) => {
     destPath = withExt(srcPath, '.js');
   }
   ({force} = getOptions(hOptions));
-  if (force || !newerDestFileExists(srcPath, destPath)) {
+  if (force || !newerDestFilesExist(srcPath, destPath)) {
     hInfo = pathlib.parse(destPath);
     stub = hInfo.name;
     tamlCode = slurp(srcPath);
@@ -311,4 +311,4 @@ export var brewTamlFile = (srcPath, destPath = undef, hOptions = {}) => {
 
 // ---------------------------------------------------------------------------
 
-//# sourceMappingURL=DataStores.js.map
+//# sourceMappingURL=data-stores.js.map

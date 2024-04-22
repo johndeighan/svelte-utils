@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "language-translator.test.js",
+  "sourceRoot": "..\\",
+  "sources": [
+    "test\\language-translator.test.coffee"
+  ],
+  "names": [],
+  "mappings": "AAAiC;AAAA,IAAA,GAAA,EAAA,KAAA,EAAA;;AAEjC,OAAA;EAAQ,YAAR;CAAA,MAAA;;AACA,OAAA;EACC,kBADD;EACqB,YADrB;CAAA,MAAA;;AAGA,OAAA;EAAQ,KAAR;CAAA,MAAA,6BANiC;;;AAUjC,KAAA,GAAQ,IAAI,kBAAJ,CAAA;;AAER,GAAA,GAAM;;AAEN,UAAA,GAAa,CAAA,MAAM,KAAK,CAAC,SAAN,CAAgB,OAAhB,EAAyB,IAAzB,EAA+B,IAA/B,CAAN;;AACb,KAAA,CAAM,UAAN,EAAkB,OAAlB;;AAEA,UAAA,GAAa,CAAA,MAAM,KAAK,CAAC,SAAN,CAAgB,OAAhB,EAAyB,IAAzB,EAA+B,IAA/B,CAAN;;AACb,KAAA,CAAM,UAAN,EAAkB,OAAlB",
+  "sourcesContent": [
+    "# language-translator.test.coffee\r\n\r\nimport {setDebugging} from '@jdeighan/base-utils/debug'\r\nimport {\r\n\tLanguageTranslator, MSTranslator,\r\n\t} from '@jdeighan/svelte-utils/language-translator'\r\nimport {equal} from '@jdeighan/base-utils/utest'\r\n\r\n# ---------------------------------------------------------------------------\r\n\r\ntrans = new LanguageTranslator()\r\n\r\nstr = 'hello'\r\n\r\ntranslated = await trans.translate('hello', 'en', 'zh')\r\nequal translated, 'hello'\r\n\r\ntranslated = await trans.translate('hello', 'en', 'zh')\r\nequal translated, 'hello'\r\n"
+  ]
+}

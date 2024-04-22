@@ -12,7 +12,7 @@ import {LOG} from '@jdeighan/base-utils/log'
 import {mkpath, barf} from '@jdeighan/base-utils/fs'
 import {
 	fileExt, isFile, isDir, mkDir,
-	} from '@jdeighan/coffee-utils/fs'
+	} from '@jdeighan/base-utils/fs'
 
 
 # ---------------------------------------------------------------------------

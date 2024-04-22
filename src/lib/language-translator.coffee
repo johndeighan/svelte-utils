@@ -1,4 +1,4 @@
-# LanguageTranslator.coffee
+# language-translator.coffee
 
 import fetch from 'node-fetch'
 import {v4 as uuid} from 'uuid'

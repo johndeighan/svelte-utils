@@ -1,4 +1,4 @@
-# DataStores.coffee
+# data-stores.coffee
 
 import pathlib from 'path'
 import {writable, readable} from 'svelte/store'
@@ -10,7 +10,7 @@ import {
 import {assert, croak} from '@jdeighan/base-utils/exceptions'
 import {fromTAML} from '@jdeighan/base-utils/taml'
 import {
-	slurp, barf, withExt, newerDestFileExists,
+	slurp, barf, withExt, newerDestFilesExist,
 	} from '@jdeighan/base-utils/fs'
 import {
 	inBrowser, getLocalStore, setLocalStore,
@@ -244,7 +244,7 @@ export brewTamlFile = (srcPath, destPath=undef, hOptions={}) =>
 	if notdefined(destPath)
 		destPath = withExt(srcPath, '.js')
 	{force} = getOptions(hOptions)
-	if force || ! newerDestFileExists(srcPath, destPath)
+	if force || ! newerDestFilesExist(srcPath, destPath)
 		hInfo = pathlib.parse(destPath)
 		stub = hInfo.name
 

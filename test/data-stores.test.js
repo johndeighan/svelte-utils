@@ -1,4 +1,4 @@
-  // DataStores.test.coffee
+  // data-stores.test.coffee
 import {
   undef
 } from '@jdeighan/base-utils';
@@ -16,7 +16,7 @@ import {
   LocalStorageDataStore,
   PropsDataStore,
   TAMLDataStore
-} from '@jdeighan/svelte-utils/stores';
+} from '@jdeighan/svelte-utils/data-stores';
 
 // ---------------------------------------------------------------------------
 (function() {
@@ -33,4 +33,4 @@ import {
   return unsub();
 })();
 
-//# sourceMappingURL=DataStores.test.js.map
+//# sourceMappingURL=data-stores.test.js.map
